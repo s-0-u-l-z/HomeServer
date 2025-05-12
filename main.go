@@ -41,14 +41,14 @@ type Message struct {
 }
 
 var users = map[string]string{
-    "admin": "tk",
-    "Theo":  "family",
-    "Anna":  "family",
-    "Grace": "family",
-    "Jake":  "family",
-    "Chase": "family",
-    "Kelly": "family",
-    "Brian": "family",
+    "admin": "server",
+    "":  "family",
+    "":  "family",
+    "": "family",
+    "":  "family",
+    "": "family",
+    "": "family",
+    "": "family",
 }
 
 func main() {
