@@ -13,6 +13,7 @@ import (
     "strings"
     "sync"
     "time"
+
     "github.com/gorilla/mux"
     "github.com/gorilla/sessions"
     "github.com/gorilla/websocket"
@@ -40,27 +41,47 @@ type Message struct {
     Time    time.Time `json:"time"`
 }
 
-var users = map[string]string{
-    "admin": "server",
-    "":  "family",
-    "":  "family",
-    "": "family",
-    "":  "family",
-    "": "family",
-    "": "family",
-    "": "family",
+var users = map[string]string{}
+
+const usersFile = "users.json"
+
+func init() {
+    if _, err := os.Stat(usersFile); os.IsNotExist(err) {
+        fmt.Print("First run detected. How many regular users do you want to create? ")
+        var n int
+        fmt.Scanln(&n)
+
+        for i := 0; i < n; i++ {
+            var username, password string
+            fmt.Printf("Enter username #%d: ", i+1)
+            fmt.Scanln(&username)
+            fmt.Printf("Enter password for %s: ", username)
+            fmt.Scanln(&password)
+            users[username] = password
+        }
+
+        users["admin"] = "server"
+
+        f, _ := os.Create(usersFile)
+        json.NewEncoder(f).Encode(users)
+        f.Close()
+        fmt.Println("✅ Users saved to users.json")
+    } else {
+        f, _ := os.Open(usersFile)
+        json.NewDecoder(f).Decode(&users)
+        f.Close()
+    }
 }
 
 func main() {
     os.MkdirAll("uploads", 0755)
 
-    // Set proper session options
     store.Options = &sessions.Options{
         Path:     "/",
-        MaxAge:   86400 * 7, // 7 days
+        MaxAge:   86400 * 7,
         HttpOnly: true,
         SameSite: http.SameSiteLaxMode,
-        Secure:   false, // Important: false because localhost is HTTP
+        Secure:   false,
     }
 
     r := mux.NewRouter()
@@ -119,46 +140,26 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
     user := getSessionUser(r)
-    if user == "" {
-        http.Redirect(w, r, "/", http.StatusFound)
-        return
-    }
     templates.ExecuteTemplate(w, "home.html", map[string]string{"User": user})
 }
 
 func uploadsPage(w http.ResponseWriter, r *http.Request) {
     user := getSessionUser(r)
-    if user == "" {
-        http.Redirect(w, r, "/", http.StatusFound)
-        return
-    }
     templates.ExecuteTemplate(w, "uploads.html", map[string]string{"User": user})
 }
 
 func statsPage(w http.ResponseWriter, r *http.Request) {
     user := getSessionUser(r)
-    if user == "" {
-        http.Redirect(w, r, "/", http.StatusFound)
-        return
-    }
     templates.ExecuteTemplate(w, "stats.html", map[string]string{"User": user})
 }
 
 func settingsPage(w http.ResponseWriter, r *http.Request) {
     user := getSessionUser(r)
-    if user == "" {
-        http.Redirect(w, r, "/", http.StatusFound)
-        return
-    }
     templates.ExecuteTemplate(w, "settings.html", map[string]string{"User": user})
 }
 
 func chatPage(w http.ResponseWriter, r *http.Request) {
     user := getSessionUser(r)
-    if user == "" {
-        http.Redirect(w, r, "/", http.StatusFound)
-        return
-    }
     templates.ExecuteTemplate(w, "chat.html", map[string]string{"User": user})
 }
 
