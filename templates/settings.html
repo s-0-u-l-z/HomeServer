@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Settings - Server Hub</title>
+  <link rel="stylesheet" href="/static/css/style.css?v=1">
+</head>
+<body>
+  <div class="container"><!-- same flex container across all pages -->
+
+    <aside class="sidebar">
+      <div class="logo">
+        Server<span style="color: var(--primary-color);">Hub</span>
+      </div>
+      <button id="toggle-theme-btn">Toggle Theme</button>
+      <nav>
+        <a href="/home">Dashboard</a>
+        <a href="/uploads">Uploads</a>
+        <a href="/stats">Stats</a>
+        <a href="/settings">Settings</a>
+        <a href="/chat">Chat Room</a>
+        {{ if eq .User "admin" }}<a href="/admin">Admin</a>{{ end }}
+        <a href="/logout">Logout</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <h1>Settings</h1>
+
+      <div class="card">
+        <h3>Coming Soon</h3>
+        <p>Here you’ll be able to tweak your preferences and account details.</p>
+      </div>
+    </main>
+
+  </div><!-- /container -->
+
+  <script src="/static/js/main.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Server Hub</title>
+  <link rel="stylesheet" href="/static/css/style.css?v=1">
+</head>
+<body>
+  <div class="container">
+
+    <aside class="sidebar">
+      <div class="logo">Server<span style="color: var(--primary-color);">Hub</span></div>
+      <button id="toggle-theme-btn">Toggle Theme</button>
+      <nav>
+        <a href="/home">Dashboard</a>
+        <a href="/uploads">Uploads</a>
+        <a href="/stats">Stats</a>
+        <a href="/settings">Settings</a>
+        <a href="/chat">Chat Room</a>
+        {{ if eq .User "admin" }}<a href="/admin">Admin</a>{{ end }}
+        <a href="/logout">Logout</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <h1 id="greeting">Loading...</h1>
+
+      <input type="hidden" id="username" value="{{.User}}">
+
+      <div class="card">
+        <h3>Upload File</h3>
+        <input type="file" id="fileInput">
+        <button id="uploadBtn">Upload</button>
+      </div>
+
+      <div class="card">
+        <h3>Search Files</h3>
+        <input type="text" id="searchInput" placeholder="Search...">
+        <div id="searchResults" class="results-list"></div>
+      </div>
+
+      <div class="card">
+        <h3>Recent Uploads</h3>
+        <ul id="uploadsList"></ul>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script src="/static/js/main.js?v=1"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const username = document.getElementById("username").value;
+      setGreeting(username);
+    });
+  </script>
+
+</body>
+</html>
