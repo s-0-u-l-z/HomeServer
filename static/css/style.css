@@ -1,0 +1,206 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* GLOBAL THEME COLORS */
+:root {
+  --primary-color: #9b59b6;
+  --secondary-color: #16a085;
+  --main-bg: #0f0f1a;
+  --secondary-bg: #1f1f2a;
+  --card-bg: #252535;
+  --text-color: #cccccc;
+}
+
+/* Theme Modes */
+body.theme-default {
+  --primary-color: #9b59b6;
+}
+body.theme-green {
+  --primary-color: #16a085;
+}
+body.theme-white {
+  --primary-color: #444444;
+  --main-bg: #ffffff;
+  --secondary-bg: #f2f2f2;
+  --card-bg: #ffffff;
+  --text-color: #222222;
+}
+
+/* BASE */
+html, body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--main-bg);
+  color: var(--text-color);
+  height: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background: var(--secondary-bg);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-200px);
+  transition: transform 0.5s ease-in-out;
+  padding-top: 20px;
+}
+.sidebar .logo {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 1em;
+}
+.sidebar nav a,
+.sidebar button {
+  display: block;
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 0.5em 1em;
+  margin: 0.2em 0;
+}
+.sidebar nav a:hover,
+.sidebar button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 200px;
+  padding: 1em;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  padding: 1.5em;
+  margin: 1em 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* LOGIN PAGE */
+.login-container {
+  max-width: 400px;
+  margin: 80px auto;
+  background: var(--secondary-bg);
+  padding: 2.5em;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 1s ease-out forwards;
+}
+
+/* Inputs and Buttons */
+input, button {
+  width: 100%;
+  padding: 0.75em;
+  margin: 0.75em 0;
+  border: none;
+  border-radius: 6px;
+}
+button {
+  background: var(--primary-color);
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+button:hover {
+  background: #7a3aed;
+  transform: scale(1.05);
+}
+
+/* Server and Hub Text Styling */
+.server-text {
+  color: white;
+  font-weight: 600;
+}
+
+.hub-text {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Search Results */
+.results-list img {
+  max-width: 100px;
+  max-height: 100px;
+  margin: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  transition: transform 0.2s, opacity 0.5s ease;
+  cursor: pointer;
+}
+.results-list img:hover {
+  transform: scale(1.1);
+}
+
+/* Uploads List */
+.uploads-list li {
+  list-style: none;
+  margin: 8px 0;
+  cursor: pointer;
+  color: var(--primary-color);
+  transition: transform 0.2s, opacity 0.5s ease;
+}
+
+/* Fade-in Animation */
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* In your existing style.css */
+
+.video-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+
+.video-wrapper video {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  cursor: default;
+}
+
+.video-wrapper .download-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0.8;
+}
+.video-wrapper .download-btn:hover {
+  opacity: 1;
+}
