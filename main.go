@@ -47,7 +47,9 @@ const usersFile = "users.json"
 
 func init() {
     if _, err := os.Stat(usersFile); os.IsNotExist(err) {
-        fmt.Print("First run detected. How many regular users do you want to create? ")
+        fmt.Println("First run detected.")
+        fmt.Println("The default admin username is 'admin' and the password is 'server'.")
+        fmt.Print("How many regular users do you want to create? ")
         var n int
         fmt.Scanln(&n)
 
