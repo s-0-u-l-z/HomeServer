@@ -239,7 +239,26 @@ func systemStatsHandler(w http.ResponseWriter, r *http.Request) {
 func deleteImageHandler(w http.ResponseWriter, r *http.Request) {
     r.ParseForm()
     img := r.FormValue("image")
-    os.Remove(filepath.Join("uploads", img))
+
+    // Clean the provided path
+    cleanImage := filepath.Clean(img)
+
+    // Define and normalize the base uploads directory
+    baseDir := filepath.Clean("uploads")
+    fullPath := filepath.Join(baseDir, cleanImage)
+
+    // Ensure the path stays within the uploads directory
+    if !strings.HasPrefix(fullPath, baseDir+string(os.PathSeparator)) {
+        http.Error(w, "Invalid file path", http.StatusBadRequest)
+        return
+    }
+
+    // Attempt to delete the file
+    if err := os.Remove(fullPath); err != nil {
+        http.Error(w, "Failed to delete file", http.StatusInternalServerError)
+        return
+    }
+
     w.Write([]byte("deleted"))
 }
 
