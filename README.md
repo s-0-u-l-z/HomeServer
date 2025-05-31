@@ -70,7 +70,6 @@ go run main.go
 |--------------|-----------------|
 | ![Uploads Screenshot](screenshots/uploads.png) | ![Admin Screenshot](screenshots/admin.png) |
 
-> _💡 Place your screenshots in a `/screenshots` folder at the root of your repo._
 
 ---
 
