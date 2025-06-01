@@ -1,3 +1,4 @@
+
 package main
 
 import (
@@ -247,7 +248,6 @@ func deleteImageHandler(w http.ResponseWriter, r *http.Request) {
     r.ParseForm()
     img := filepath.Clean(r.FormValue("image"))
 
-    // Prevent path traversal
     if strings.Contains(img, "..") || strings.HasPrefix(img, "/") || strings.Contains(img, string(os.PathSeparator)) {
         http.Error(w, "Invalid file path", http.StatusBadRequest)
         return
@@ -262,7 +262,6 @@ func deleteImageHandler(w http.ResponseWriter, r *http.Request) {
     w.Write([]byte("deleted"))
 }
 
-
 func listMessagesHandler(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(messages)
 }
@@ -270,10 +269,11 @@ func listMessagesHandler(w http.ResponseWriter, r *http.Request) {
 func deleteMessageHandler(w http.ResponseWriter, r *http.Request) {
     r.ParseForm()
     id, _ := strconv.Atoi(r.FormValue("id"))
+    currentUser := getSessionUser(r)
 
     for i, m := range messages {
         if m.ID == id {
-            if m.User != "admin" {
+            if m.User != currentUser && currentUser != "admin" {
                 http.Error(w, "Forbidden", http.StatusForbidden)
                 return
             }
@@ -284,7 +284,6 @@ func deleteMessageHandler(w http.ResponseWriter, r *http.Request) {
 
     w.Write([]byte("deleted"))
 }
-
 
 // ===== WebSocket Chat =====
 
