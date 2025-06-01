@@ -237,23 +237,23 @@ func systemStatsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteImageHandler(w http.ResponseWriter, r *http.Request) {
+    sess, _ := store.Get(r, "session")
+    user, _ := sess.Values["user"].(string)
+    if user != "admin" {
+        http.Error(w, "Forbidden", http.StatusForbidden)
+        return
+    }
+
     r.ParseForm()
-    img := r.FormValue("image")
+    img := filepath.Clean(r.FormValue("image"))
 
-    // Clean the provided path
-    cleanImage := filepath.Clean(img)
-
-    // Define and normalize the base uploads directory
-    baseDir := filepath.Clean("uploads")
-    fullPath := filepath.Join(baseDir, cleanImage)
-
-    // Ensure the path stays within the uploads directory
-    if !strings.HasPrefix(fullPath, baseDir+string(os.PathSeparator)) {
+    // Prevent path traversal
+    if strings.Contains(img, "..") || strings.HasPrefix(img, "/") || strings.Contains(img, string(os.PathSeparator)) {
         http.Error(w, "Invalid file path", http.StatusBadRequest)
         return
     }
 
-    // Attempt to delete the file
+    fullPath := filepath.Join("uploads", img)
     if err := os.Remove(fullPath); err != nil {
         http.Error(w, "Failed to delete file", http.StatusInternalServerError)
         return
@@ -262,6 +262,7 @@ func deleteImageHandler(w http.ResponseWriter, r *http.Request) {
     w.Write([]byte("deleted"))
 }
 
+
 func listMessagesHandler(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(messages)
 }
@@ -269,14 +270,21 @@ func listMessagesHandler(w http.ResponseWriter, r *http.Request) {
 func deleteMessageHandler(w http.ResponseWriter, r *http.Request) {
     r.ParseForm()
     id, _ := strconv.Atoi(r.FormValue("id"))
+
     for i, m := range messages {
         if m.ID == id {
+            if m.User != "admin" {
+                http.Error(w, "Forbidden", http.StatusForbidden)
+                return
+            }
             messages = append(messages[:i], messages[i+1:]...)
             break
         }
     }
+
     w.Write([]byte("deleted"))
 }
+
 
 // ===== WebSocket Chat =====
 
