@@ -237,6 +237,13 @@ func systemStatsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteImageHandler(w http.ResponseWriter, r *http.Request) {
+    sess, _ := store.Get(r, "session")
+    user, _ := sess.Values["user"].(string)
+    if user != "admin" {
+        http.Error(w, "Forbidden", http.StatusForbidden)
+        return
+    }
+
     r.ParseForm()
     img := r.FormValue("image")
 
@@ -267,6 +274,13 @@ func listMessagesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteMessageHandler(w http.ResponseWriter, r *http.Request) {
+    sess, _ := store.Get(r, "session")
+    user, _ := sess.Values["user"].(string)
+    if user != "admin" {
+        http.Error(w, "Forbidden", http.StatusForbidden)
+        return
+    }
+
     r.ParseForm()
     id, _ := strconv.Atoi(r.FormValue("id"))
     for i, m := range messages {
